@@ -1,26 +1,45 @@
-# Builds the project, signs an API, and then uploads it
+# Builds the project, creates APKs, and uploads artifacts
 name: Android Master Branch CI
 
 on:
   push:
     branches:
       - 'master'
+  workflow_dispatch: # Allow manual trigger
 
 jobs:
   build:
-    name: Build the project
+    name: Build and Upload APKs
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout project
         uses: actions/checkout@v4
-      - name: Set up JDK 1.17
+
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: 17
-      - name: Build with Gradle
-        run: ./gradlew build
-      - name: Build Signed APK
+          cache: 'gradle'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: wrapper
+          cache-read-only: false
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Build Release APK
+        run: ./gradlew assembleRelease --stacktrace
+
+      - name: Sign Release APK
+        if: ${{ secrets.SIGNING_KEY != '' }}
         uses: r0adkll/sign-android-release@v1
         with:
           releaseDirectory: app/build/outputs/apk/release
@@ -30,8 +49,27 @@ jobs:
           keyPassword: ${{ secrets.KEY_PASSWORD }}
         env:
           BUILD_TOOLS_VERSION: "35.0.0"
-      - name: Upload APK
+
+      - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: app
-          path: app/build/outputs/apk/release/com.jkuester.unlauncher-signed.apk
+          name: unlauncher-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          retention-days: 30
+
+      - name: Upload Release APK (Unsigned)
+        uses: actions/upload-artifact@v4
+        with:
+          name: unlauncher-release-unsigned-apk
+          path: app/build/outputs/apk/release/*-unsigned.apk
+          retention-days: 30
+          if-no-files-found: ignore
+
+      - name: Upload Release APK (Signed)
+        uses: actions/upload-artifact@v4
+        if: ${{ secrets.SIGNING_KEY != '' }}
+        with:
+          name: unlauncher-release-signed-apk
+          path: app/build/outputs/apk/release/*-signed.apk
+          retention-days: 90
+          if-no-files-found: ignore
