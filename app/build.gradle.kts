@@ -1,13 +1,13 @@
 import com.google.protobuf.gradle.id
 
 plugins {
-    id("com.android.application")
-    id("dagger.hilt.android.plugin")
-    id("com.google.devtools.ksp")
-    id("com.google.protobuf")
-    id("org.jlleitschuh.gradle.ktlint")
-    id("org.jetbrains.kotlinx.kover")
-    kotlin("android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt)
+    alias(libs.plugins.protobuf)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.kover)
 }
 
 android {
@@ -84,46 +84,56 @@ android {
 }
 
 dependencies {
-    // Kotlin Libraries
-    // This needs to match ksp and kotlin-gradle-plugin
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.0")
+    // Kotlin
+    implementation(libs.kotlin.stdlib)
 
-    // Support Libraries
-    implementation("androidx.appcompat:appcompat:1.7.0")
-    implementation("androidx.recyclerview:recyclerview:1.3.2")
-    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
-    implementation("androidx.datastore:datastore:1.1.1")
-    implementation("androidx.datastore:datastore-core:1.1.1")
-    implementation("com.google.protobuf:protobuf-javalite:4.29.2")
+    // AndroidX Core
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.fragment.ktx)
 
-    // Arch Components
-    implementation("androidx.core:core-ktx:1.15.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.5")
-    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.8.5")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
-    implementation("androidx.room:room-runtime:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
-    ksp("androidx.room:room-compiler:2.6.1")
+    // AndroidX UI
+    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.constraintlayout)
 
-    // 3rd party libs
-    implementation("com.intuit.sdp:sdp-android:1.1.1")
-    implementation("com.intuit.ssp:ssp-android:1.1.1")
-    implementation("com.google.dagger:hilt-android:2.54")
-    ksp("androidx.hilt:hilt-compiler:1.2.0")
-    ksp("com.google.dagger:hilt-android-compiler:2.54")
+    // AndroidX Lifecycle (removed deprecated lifecycle-extensions)
+    implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
-    // Test libs
-    testImplementation(kotlin("test"))
-    testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
-    testImplementation("io.kotest:kotest-assertions-core:5.9.1")
-    testImplementation("io.mockk:mockk-android:1.13.14")
-    testImplementation("io.mockk:mockk-agent:1.13.14")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.1")
+    // AndroidX Navigation
+    implementation(libs.androidx.navigation.fragment.ktx)
+
+    // AndroidX Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    // AndroidX DataStore
+    implementation(libs.androidx.datastore)
+    implementation(libs.androidx.datastore.core)
+    implementation(libs.protobuf.javalite)
+
+    // Hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+    ksp(libs.hilt.android.compiler)
+
+    // Third Party
+    implementation(libs.sdp.android)
+    implementation(libs.ssp.android)
+
+    // Testing
+    testImplementation(libs.kotlin.test)
+    testImplementation(libs.junit.jupiter)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.mockk.android)
+    testImplementation(libs.mockk.agent)
+    testImplementation(libs.kotlinx.coroutines.test)
 }
 protobuf {
     protoc {
-        artifact = "com.google.protobuf:protoc:4.29.2"
+        artifact = libs.protobuf.protoc.get().toString()
     }
     generateProtoTasks {
         all().forEach { task ->
