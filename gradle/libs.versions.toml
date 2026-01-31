@@ -24,7 +24,7 @@ androidxLifecycle = "2.8.7"
 androidxNavigation = "2.8.5"
 
 # AndroidX Room
-androidxRoom = "2.6.1"
+androidxRoom = "2.7.0-alpha12"
 
 # AndroidX DataStore
 androidxDatastore = "1.1.1"

@@ -19,16 +19,22 @@ import com.jkuester.unlauncher.dialog.TimeFormatDialog
 import com.jkuester.unlauncher.fragment.WithFragmentLifecycle
 import com.sduduzog.slimlauncher.R
 import com.sduduzog.slimlauncher.databinding.OptionsFragmentBinding
+import com.sduduzog.slimlauncher.ui.options.viewmodel.OptionsViewModel
 import com.sduduzog.slimlauncher.utils.BaseFragment
 import com.sduduzog.slimlauncher.utils.createTitleAndSubtitleText
 import com.sduduzog.slimlauncher.utils.isDefaultLauncher
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import androidx.fragment.app.viewModels
 
 @AndroidEntryPoint
 class OptionsFragment : BaseFragment() {
+    // ViewModel - Modern MVVM pattern
+    private val viewModel: OptionsViewModel by viewModels()
+
     @Inject
     lateinit var iActivity: ComponentActivity
+    // Legacy repository injection - TODO: Migrate fully to ViewModel pattern
     @Inject @WithFragmentLifecycle
     lateinit var corePreferencesRepo: DataRepository<CorePreferences>
 

@@ -14,7 +14,7 @@ android {
     compileSdk = 35
     defaultConfig {
         applicationId = "com.jkuester.unlauncher"
-        minSdk = 21
+        minSdk = 24
         //noinspection OldTargetApi
         targetSdk = 35
         versionName = "2.2.0-beta.1"

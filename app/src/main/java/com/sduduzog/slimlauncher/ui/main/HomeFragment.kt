@@ -52,6 +52,7 @@ import com.sduduzog.slimlauncher.adapters.HomeAdapter
 import com.sduduzog.slimlauncher.databinding.HomeFragmentBottomBinding
 import com.sduduzog.slimlauncher.databinding.HomeFragmentContentBinding
 import com.sduduzog.slimlauncher.databinding.HomeFragmentDefaultBinding
+import com.sduduzog.slimlauncher.ui.main.viewmodel.HomeViewModel
 import com.sduduzog.slimlauncher.utils.BaseFragment
 import com.sduduzog.slimlauncher.utils.isSystemApp
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,11 +60,16 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+import androidx.fragment.app.viewModels
 
 private const val APP_TILE_SIZE: Int = 3
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment() {
+    // ViewModel - Modern MVVM pattern
+    private val viewModel: HomeViewModel by viewModels()
+
+    // Legacy repository injection - TODO: Migrate fully to ViewModel pattern
     @Inject @WithFragmentLifecycle
     lateinit var corePreferencesRepo: DataRepository<CorePreferences>
 

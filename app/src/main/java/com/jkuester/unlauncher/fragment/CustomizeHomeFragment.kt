@@ -14,17 +14,23 @@ import com.jkuester.unlauncher.bindings.setupQuickButtonIcons
 import com.jkuester.unlauncher.datasource.DataRepository
 import com.jkuester.unlauncher.datastore.proto.QuickButtonPreferences
 import com.jkuester.unlauncher.datastore.proto.UnlauncherApps
+import com.jkuester.unlauncher.fragment.viewmodel.CustomizeHomeViewModel
 import com.sduduzog.slimlauncher.R
 import com.sduduzog.slimlauncher.databinding.CustomizeHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+import androidx.fragment.app.viewModels
 
 @AndroidEntryPoint
 class CustomizeHomeFragment : Fragment() {
+    // ViewModel - Modern MVVM pattern
+    private val viewModel: CustomizeHomeViewModel by viewModels()
+
     @Inject
     lateinit var iActivity: ComponentActivity
     @Inject
     lateinit var iFragmentManager: FragmentManager
+    // Legacy repository injection - TODO: Migrate fully to ViewModel pattern
     @Inject
     lateinit var quickButtonPreferencesRepo: DataRepository<QuickButtonPreferences>
     @Inject
